@@ -1,0 +1,84 @@
+html, body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0%;
+    height: 100%;
+    background: white;
+    overflow-x: hidden;
+    background-color: rgb(241, 239, 239);
+}
+a{
+    color: black;
+}
+.background-login{
+    position: absolute;
+    /* border: solid black; */
+    height: fit-content;
+    width: 100%;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+#login-box{
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content;
+}
+
+.input-data{
+    width: 200px;
+    height: 2.5rem;
+    background: transparent;
+    margin-bottom: 1rem;
+    border: 0.5px solid rgb(82, 82, 82);
+    border-radius: 15px;
+    font-size: 1rem;
+    padding: 5px 10px;
+    outline: none;
+}
+.input-data:focus{
+    box-shadow: 0 0 3px 3px gray;
+}
+
+#register-form, #okay-form{
+    margin-top: 50px;
+    margin-left: 100%;
+    height: fit-content;
+}
+
+#button-login, #button-register{
+    margin: 30px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    height: fit-content;
+    padding: 10px 0;
+    width: 100px;
+    border-radius: 50px;
+    background: transparent;
+    border: 2px solid gray;
+    outline: none;
+}
+
+#button-login:hover, #button-register:hover{
+    transition: 0.3s;
+    background-color: white;
+    border: 2px solid gray;
+    box-shadow: 0 0 10px gray, 0 0 20px gray;
+}
+
+#button-register, #button-okay{
+    cursor: pointer;
+}
+h1{
+    margin: 0;
+    font-weight: 300;
+    font-size: 2rem;
+    letter-spacing: 5px;
+}
+#caption{
+    margin: 100px 0 0 250px;
+    text-decoration: none;
+}

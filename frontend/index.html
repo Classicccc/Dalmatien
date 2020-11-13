@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dalmatien</title>
+    <link href="styles.css" rel="stylesheet" type="text/css">
+    <script src="https://use.fontawesome.com/f8b6ed9a6d.js"></script>
+</head>
+<header>
+    <div id="caption">
+        <span id="dalmatien">Dalmatien</span>
+        <!-- <span>
+            <div id="search">
+            <input id="input-search" placeholder="Поиск">
+            <span id="icon-search">
+                <i class="fa fa-search"></i>
+            </span>
+            </div>
+        </span> -->
+        <span>
+            <span class="menu">
+                <i class="fa fa-user-circle"></i>
+            </span>
+            <span class="menu">
+                <i class="fa fa-envelope"></i>
+            </span>
+            <span class="menu">
+                <i class="fa fa-image"></i>
+            </span>
+        </span>
+    </div>
+</header>
+<body>
+    <script>
+        if (localStorage.getItem("curLogin") == null)
+            document.location.href = ("login.html") 
+    </script>
+
+    <div class="main-message">
+        <div class="user-messages">
+            <div id="mHeader">
+                <div class="username">
+                    <span id="backToContacts">
+                        <i id="back-to-contacts" class="fa fa-chevron-left"></i>
+                        Back to contacts
+                    </span>
+                    <div>
+                        <a id="login-link" href="#">username</a>
+                        <a class="user-pic" href="#">
+                            <!-- <img id="dialog-user-pic" src="img/user.png"> -->
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="mBody">
+                Your messages are displayed here
+            </div>
+            <div id="mFooter">
+                <input id="input-message" placeholder="Введите сообщение">
+                    <span id="icon_mes">
+                        <i class="fa fa-paper-plane"></i>
+                    </span>
+            </div>
+        </div>
+        <div class="user-contacts">
+            <!-- CONTACTS -->
+            <div id="background-contacts">
+                <div style="text-align: center; border-bottom: solid 1px; color: #2196f3;">Your contacts</div>
+                <div class="body-contacts">
+
+                </div>
+                <div style="text-align: center; border-bottom: solid 1px; color: gray; margin-top: 50px;">Your requests</div>
+                <div class="body-contacts" style="max-height: 150px; min-height: min-content;">
+                    
+                </div>
+                <div style="text-align: center; margin-top: 30px; color: gray;">Your requests are displayed here</div>
+            </div>
+        </div>
+    </div>
+    <div class="main-profile">
+        <div class="background-profile">
+            <div id="img-profile">
+                <div id="settings-profile">
+                    <span class="icons-profile">
+                        <div id="dropdown">
+                            <i id="icon-settings-profile" class="fa fa-ellipsis-h fa-2x" style="color: rgb(184, 183, 183)"></i>
+                            <div id="dropdown-content">
+                                <a id="toMyPage">Мой профиль</a>
+                                <a id="loadProfileImg" href="#">Загрузить изображение профиля</a>
+                                <a id="sing-out" href="login.html">Выйти из профиля</a>
+                            </div>
+                        </div>
+                    </span>
+                    <span>
+                        <div id="search" title="Найти пользователей по логину">
+                        <input id="input-search" placeholder="Search">
+                        <span id="icon-search">
+                            <i class="fa fa-search"></i>
+                        </span>
+                        </div>
+                    </span>
+                </div>
+                <div class="info-profile" id="username-profile">user name</div>
+                <div class="info-profile" id="login-profile">login</div>
+                <div class="info-profile" id="icon-toMyPage" title="Мой профиль">
+                    <i class="fa fa-user"></i>
+                </div>
+                <!-- <div class="info-profile" id="message-profile">Message to all sap sap sap saps saspaspapsap sas apspa psaps apsp aps</div> -->
+            </div>
+            <div id="footer-profile" style="position: relative;">
+                <div id="other-info-profile" style="display: inline-block;">
+                    <div class="other-info" id="other-info-caption">
+                        <div>Login: </div>
+                        <br>
+                        <div>Name: </div>
+                        <div>Surname: </div>
+                        <div>Age: </div>
+                        <div>City: </div>
+                    </div>
+                    <div class="other-info" id="other-info-data">
+                        <div class="other-info-profile">Login</div>
+                        <br>  
+                        <div class="other-info-profile">Name</div>
+                        <div class="other-info-profile">Surname</div>
+                        <div class="other-info-profile">Age</div>
+                        <div class="other-info-profile">City</div>
+                    </div>
+                </div>
+                <div id="request-to-user" style="display: inline-block;">
+                    <button>Add this user</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-pictures">
+        
+    </div>
+    <div id="button-split">Split</div>
+    <audio id="audio_bang">
+        <source src="Bang.mp3">
+    </audio>
+
+    <div class="window">
+            <div id="loadPic">
+                <input type="file" id="inputImg" />
+                <img id="userImg" width="500px" height="450px" />
+                <button id="loadOk">Ok</button>
+            </div>
+            <div id="closeWindow">
+            <i class="fa fa-times fa-2x"></i>
+            </div>
+    </div>
+
+
+    <script src="contacts.js"></script>
+    <script src="loadpage.js"></script>
+    <script src="msg.js"></script>
+    <script src="view.js"></script>
+</body>
+</html>

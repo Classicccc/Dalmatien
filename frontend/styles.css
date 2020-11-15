@@ -169,7 +169,7 @@ header {
     transition: 0.5s;
 } */
 .main-pictures{
-    
+
 }
 
 .message{
@@ -390,7 +390,7 @@ header {
 .window div {
     display: inline-block;
 }
-#loadOk{
+.loadOk{
     position: relative;
     width: 50px;
     height: 25px;
@@ -400,22 +400,22 @@ header {
     left: calc(100% - 50px);
     cursor: pointer;
 }
-#loadOk:hover{
+.loadOk:hover{
     background-color: gray;
     color: white;
     transition: 0.3s;
 }
-#closeWindow{
+.closeWindow{
     width: 26px;
     vertical-align: top;
     cursor: pointer;
 }
-#userImg{
+#userImg, #userImgPost{
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
 }
-#loadPic{
+.loadPic{
     width:  500px;
     height: 500px;
     padding:10px;
@@ -475,4 +475,76 @@ header {
 }
 .body-contacts::-webkit-scrollbar-thumb{
     background-color: lightgray;
+}
+
+.input-text-post{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    outline: none;
+    height: 3rem;
+    width: 565px;
+    border: none;
+    margin: 10px 50px;
+    padding: 0 5px;
+    resize: none;
+    border-left: 0.5px solid lightgray;
+    border-right: 0.5px solid lightgray;
+}
+.input-text-post::-webkit-scrollbar{
+    width: 3px;
+    background-color: white;
+}
+.input-text-post::-webkit-scrollbar-thumb{
+    background-color: lightgray;
+}
+.text-post{
+    border-bottom: solid 1px gray;
+}
+.text-post i{
+    position: absolute;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+#attach-pic{
+    left: 25px;
+    color: gray;
+    top: 10px;
+    
+}
+#add-post{
+    right: 15px;
+    top: 35px;
+    color: #2196f3;
+}
+
+.posts{
+    padding-top: 5px;
+    font-size: 14px;
+    text-align: center;
+    color: gray;
+    height: 585px;
+    overflow-y: auto;
+}
+.posts::-webkit-scrollbar{
+    width: 5px;
+    background-color: white;
+}
+.posts::-webkit-scrollbar-thumb{
+    background-color: lightgray;
+}
+.post{
+    text-align: left;
+    margin: 50px 50px;
+    border-top: solid #2196f3 1px;
+}
+
+.content-post{
+
+}
+.text-content-post{
+    margin: 20px 0;
+    color: black;
+}
+.pic-content-post{
+    width: 100%;
+    vertical-align: bottom;
 }

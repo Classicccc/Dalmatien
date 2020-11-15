@@ -3,3 +3,5 @@
 /root.crt
 /backend/test.js
 /backend/config.json
+/backend/cert.pem
+/backend/key.pem

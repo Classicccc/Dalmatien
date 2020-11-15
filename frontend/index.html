@@ -10,14 +10,6 @@
 <header>
     <div id="caption">
         <span id="dalmatien">Dalmatien</span>
-        <!-- <span>
-            <div id="search">
-            <input id="input-search" placeholder="Поиск">
-            <span id="icon-search">
-                <i class="fa fa-search"></i>
-            </span>
-            </div>
-        </span> -->
         <span>
             <span class="menu">
                 <i class="fa fa-user-circle"></i>
@@ -135,7 +127,14 @@
     </div>
     
     <div class="main-pictures">
-        
+        <div class="text-post">
+            <i id="attach-pic" class="fa fa-paperclip"></i>
+            <textarea class="input-text-post" placeholder="Type text of your post here..."></textarea>
+            <i id="add-post" class="fa fa-check"></i>
+        </div>
+        <div class="posts">
+            Posts are displayed here
+        </div>
     </div>
     <div id="button-split">Split</div>
     <audio id="audio_bang">
@@ -143,18 +142,30 @@
     </audio>
 
     <div class="window">
-            <div id="loadPic">
-                <input type="file" id="inputImg" />
+            <div class="loadPic">
+                <input type="file" id="inputImg" accept="image/*"/>
                 <img id="userImg" width="500px" height="450px" />
-                <button id="loadOk">Ok</button>
+                <button class="loadOk">Ok</button>
             </div>
-            <div id="closeWindow">
+            <div class="closeWindow">
             <i class="fa fa-times fa-2x"></i>
             </div>
     </div>
 
+    <div class="window">
+        <div class="loadPic">
+            <input type="file" id="inputImgForPost" accept="image/*"/>
+            <img id="userImgPost" width="500px" height="450px" />
+            <button class="loadOk">Ok</button>
+        </div>
+        <div class="closeWindow">
+        <i class="fa fa-times fa-2x"></i>
+        </div>
+    </div>
 
     <script src="contacts.js"></script>
+    <script src="newPost.js"></script>
+    <script src="posts.js"></script>
     <script src="loadpage.js"></script>
     <script src="msg.js"></script>
     <script src="view.js"></script>

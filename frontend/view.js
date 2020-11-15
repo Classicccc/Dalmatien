@@ -150,7 +150,7 @@ document.getElementById("loadProfileImg").onclick = () =>
     document.getElementsByClassName("window")[0].style.display = "inline"
 }
 
-document.getElementById("closeWindow").onclick = () =>
+document.getElementsByClassName("closeWindow")[0].onclick = () =>
 {
     document.getElementsByClassName("window")[0].style.display = "none"
 }
@@ -174,7 +174,7 @@ document.getElementById("icon-toMyPage").onclick = () =>
     document.getElementById("input-search").value = ""
 }
 
-document.getElementById("loadOk").onclick = async () =>
+document.getElementsByClassName("loadOk")[0].onclick = async () =>
 {
     //send picture type = 20
     
@@ -184,6 +184,8 @@ document.getElementById("loadOk").onclick = async () =>
         alert("Image size must by < 2 mb")
     else
     {
+        document.getElementsByClassName("window")[0].style.display = "none"
+        document.getElementById("img-profile").style.backgroundImage = "url("+ URL.createObjectURL(f) +")"
         data = {
             type: 20,
             login: localStorage.getItem("curLogin")
@@ -219,7 +221,6 @@ document.getElementById("loadOk").onclick = async () =>
                 } else {
                     alert("Ошибка HTTP: " + response.status);
                 }
-        document.getElementsByClassName("window")[0].style.display = "none"
     }
 }
 

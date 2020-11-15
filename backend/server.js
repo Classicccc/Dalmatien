@@ -1,8 +1,7 @@
-const http = require('http')
+const https = require('https')
 const fs = require('fs')
 const path = require('path')
 const mysql = require('mysql2')
-const { json } = require('body-parser')
 const Stream = require('stream').Transform
 
 
@@ -18,12 +17,12 @@ const connection = mysql.createPool({
     }
   });
 
-// asdf = connection.query("SELECT * FROM dalmatien.users WHERE login = ?", ["admin"])
-//заропсы
-// INSERT INTO `dalmatien`.`users` (`id`, `login`, `password`, `name`, `surname`, `age`, `city`) VALUES ('1', 'admin', '666', 'Aleksandr', 'Artemyev', '21', 'Nolinsk');
+const options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem')
+}
 
-
-const server = http.createServer()
+const server = https.createServer(options)
 
 function loadpage(filePath, req, res) {
     
@@ -60,6 +59,7 @@ function loadpage(filePath, req, res) {
 }
 
 let currentLoginForLoadImg = ""
+let currentIdForPost = ""
 
 server.on('request', (req, res) => {
     //type: 1-message
@@ -77,7 +77,7 @@ server.on('request', (req, res) => {
             let params 
             try {
                 params = JSON.parse(body)
-                console.log(params)
+                // console.log(params)
             } catch (err)
             {
                 console.log("Must be a picture..")
@@ -227,11 +227,7 @@ server.on('request', (req, res) => {
                         res.end(JSON.stringify("ERROR"))
                     })
                 }
-                else if (params.type == 5) // 5 - contacts data
-                    // SELECT login, name, surname, photo FROM dalmatien.users WHERE login IN (
-                    // SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = "classic" and type = 2)
-                    // UNION
-                    // SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = "classic" and type = 2));                    
+                else if (params.type == 5) // 5 - contacts data                  
                 {
                     connection.promise().query("SELECT login, name, surname FROM dalmatien.users WHERE login IN (SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = ? and type <> 0) UNION SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = ? and type <> 0));", [params.login, params.login])
                     .then(result =>{
@@ -292,6 +288,50 @@ server.on('request', (req, res) => {
                         res.end("ERROR")
                     })
                 }
+                else if (params.type == 8)
+                {//get posts
+                    //SELECT text FROM dalmatien.posts WHERE login IN (SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = "classic" and type = 2) UNION SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = "classic" and type = 2)) ORDER BY id;
+                    connection.promise().query("SELECT login,name,surname FROM dalmatien.users WHERE login IN (SELECT login FROM dalmatien.posts WHERE login IN (SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = ? and type = 2) UNION SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = ? and type = 2)))", [params.login, params.login])
+                    .then(result =>{
+                            connection.promise().query("SELECT id, login, text FROM dalmatien.posts WHERE login IN (SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = ? and type = 2) UNION SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = ? and type = 2)) ORDER BY id DESC;", [params.login, params.login])
+                            .then(result2 =>{
+                                for (let i = 0; i<result2[0].length; i++)
+                                {
+                                    for (let j = 0; j<result[0].length; j++)
+                                        if (result[0][j].login == result2[0][i].login)
+                                        {
+                                            result2[0][i].name = result[0][j].name
+                                            result2[0][i].surname = result[0][j].surname
+                                        }
+                                }
+                                res.end(JSON.stringify(result2[0]))
+                            })
+                            .catch(err => {
+                                console.log(err)
+                                res.end(JSON.stringify("ERROR"))
+                            })
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            res.end(JSON.stringify("ERROR"))
+                        })
+                }
+                else if (params.type == 9)
+                {
+                    connection.promise().query("SELECT img FROM dalmatien.posts WHERE id= ? ;", [params.id])
+                    .then(result =>{
+                        //result[0][0].photo - photo from DB dalmatien.users
+
+                        // console.log(result[0][0].photo)
+                        // console.log(Object.keys(result[0][0]))
+                        // fs.writeFileSync('image.jpg', result[0][0].photo); 
+                        res.end(result[0][0].img)        
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.end("ERROR")
+                    })
+                }
                 else if (params.type == 10) //user photo
                 {
                     connection.promise().query("SELECT photo FROM dalmatien.users WHERE login= ? ;", [params.login])
@@ -307,6 +347,22 @@ server.on('request', (req, res) => {
                         console.log(err)
                         res.end("ERROR")
                     })
+                }
+                else if (params.type == 15)
+                {
+                    connection.promise().query("INSERT INTO dalmatien.posts (login, text) VALUES (?, ?)", [params.login, params.text])
+                    .then(result =>{
+                        currentIdForPost = result[0].insertId
+                        res.end(JSON.stringify(result[0].insertId))        
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.end("ERROR")
+                    })
+                }
+                else if (params.type == 16)
+                {
+                    //UPDATE posts SET text = 'hehe' WHERE id = '1';
                 }
                 else if (params.type == 20)
                 {
@@ -330,15 +386,24 @@ server.on('request', (req, res) => {
                             res.end("ERROR")
                         })
                 }
+                else if (currentIdForPost != "")
+                {
+                    connection.promise().query("UPDATE posts SET img = ? WHERE id = ?;", [blob, currentIdForPost])
+                        .then(result =>{
+                            res.end("OK")
+                            currentIdForPost = ""
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            res.end("ERROR")
+                        })
+                }
                 else 
                     res.end("Error with upload img to DB")
             }
         });
     }
     else {
-        // fp = path.join(__dirname, "/../frontend", (req.url === "/" || req.url === "/login.html") ? "login.html" : req.url == "/index.html" ? "login.html" : req.url)
-        // loadpage(fp, req, res)
-
         fp = path.join(__dirname, "/../frontend", req.url === "/" ? "index.html" : req.url)
         loadpage(fp, req, res)
     }
@@ -346,6 +411,6 @@ server.on('request', (req, res) => {
     
 })
 
-server.listen(3000, () => {
-    console.log('Server listening at http://localhost:3000')
+server.listen(443, () => {
+    console.log('Server listening at https://localhost:443')
 })

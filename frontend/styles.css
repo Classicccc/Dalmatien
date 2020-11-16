@@ -548,3 +548,16 @@ header {
     width: 100%;
     vertical-align: bottom;
 }
+
+#reload-posts{
+    font-size: 14px; 
+    color: gray; 
+    text-align: center; 
+    cursor: pointer;
+}
+
+#reload-posts:hover{
+    font-size: 16px;
+    color: black;
+    transition: 0.5s;
+}

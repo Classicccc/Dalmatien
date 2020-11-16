@@ -1,15 +1,21 @@
 loadPosts()
 
-let timerId2 = setInterval(async () => {
-    loadPosts()
-}, 60000);
+// let timerId2 = setInterval(async () => {
+//     loadPosts()
+// }, 60000);
+
+document.getElementById("reload-posts").onclick = async () =>
+{
+    if (document.getElementById("icon-reload-posts").className == "fa fa-history")
+    {
+        await loadPosts()
+    }
+}
 
 async function loadPosts()
 {
-    document.getElementsByClassName("posts")[0].innerHTML = "Your posts are displayd here "
-    let infoPost = document.createElement("i")
-                infoPost.className = "fa fa-spinner fa-pulse"
-                document.getElementsByClassName("posts")[0].appendChild(infoPost)
+    document.getElementById("icon-reload-posts").className = "fa fa-spinner fa-pulse"
+    document.getElementsByClassName("posts")[0].innerHTML = ""
     //type 8 -load posts
     const data = {
         type: 8,
@@ -115,6 +121,5 @@ async function loadPosts()
             console.log("Ошибка HTTP: " + response.status);
         }
     }
-    
-    infoPost.style.visibility = "hidden"
+    document.getElementById("icon-reload-posts").className = "fa fa-history"
 }

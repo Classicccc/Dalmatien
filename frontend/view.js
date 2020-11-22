@@ -179,9 +179,9 @@ document.getElementsByClassName("loadOk")[0].onclick = async () =>
     //send picture type = 20
     
     let f = document.getElementById("inputImg").files[0];
-    console.log(f.size)
-    if (f.size>2000000)
-        alert("Image size must by < 2 mb")
+    console.log(f.type)
+    if (f.size>2000000 || (f.type != "image/jpeg" && f.type != "image/png"))
+        alert("Image size must be < 2 mb and have type jpeg or png")
     else
     {
         document.getElementsByClassName("window")[0].style.display = "none"

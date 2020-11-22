@@ -9,35 +9,45 @@ document.getElementById("inputImgForPost").onchange = () =>
 {
     let f = document.getElementById("inputImgForPost").files[0];
     document.getElementById("userImgPost").style.backgroundImage = "url("+ URL.createObjectURL(f) +")"
+    document.getElementById("attach-pic").style.color = "#2196f3"
 }
 document.getElementsByClassName("closeWindow")[1].onclick = () =>
 {
     document.getElementsByClassName("window")[1].style.display = "none"
     fileOk = false
+    document.getElementById("attach-pic").style.color = "gray"
     document.getElementById("userImgPost").style.backgroundImage = "url()"
 }
 document.getElementsByClassName("loadOk")[1].onclick = async () =>
 {
     f = document.getElementById("inputImgForPost").files[0];
-    console.log(f.size)
-    if (f.size>2000000)
-    {
-        alert("Image size must by < 2 mb")
-        fileOk = false
-    }
+    console.log(f)
+    if (f==undefined)
+        alert("Attach some picture or cancel")
     else
     {
-        fileOk = true
-        document.getElementsByClassName("window")[1].style.display = "none"
+        console.log(f.size)
+        if (f.size>2000000 || (f.type != "image/jpeg" && f.type != "image/png"))
+        {
+            alert("Image size must be < 2 mb and have type jpeg or png")
+            fileOk = false
+            document.getElementById("attach-pic").style.color = "gray"
+        }
+        else
+        {
+            fileOk = true
+            document.getElementsByClassName("window")[1].style.display = "none"
+        }
     }
 }
 
 document.getElementById("add-post").onclick = async () =>
 {
     let text = document.getElementsByClassName("input-text-post")[0].value
-    if (text != "")
+    if (text != "" && text.length<500)
     {
-        document.getElementsByClassName("posts")[0].innerHTML = "Update your posts..."
+        console.log(text.length)
+        document.getElementsByClassName("posts")[0].innerHTML = ""
         const data = {
             type: 15,
             login: localStorage.getItem("curLogin"),
@@ -58,14 +68,16 @@ document.getElementById("add-post").onclick = async () =>
             })
             
             if (res.ok) {
-                loadPosts()
+
             } else {
                 alert("Ошибка HTTP: " + res.status);
             }
             document.getElementsByClassName("closeWindow")[1].onclick
         }
-
+        loadPosts()
+        fileOk = false
+        document.getElementById("attach-pic").style.color = "gray"
     }
     else 
-        alert("You need type some text for post")
+        alert("You need type some text for post (max = 500 symbols)")
 }

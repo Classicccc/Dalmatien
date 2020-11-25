@@ -55,7 +55,7 @@ document.getElementById("add-post").onclick = async () =>
         }
 
         document.getElementsByClassName("input-text-post")[0].value = ""
-
+        document.getElementById("icon-reload-posts").className = "fa fa-spinner fa-pulse"
 
 
         let resData = await newFetch(data)

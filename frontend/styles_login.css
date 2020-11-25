@@ -5,7 +5,8 @@ html, body {
     background: white;
     overflow-x: hidden;
     background-color: rgb(241, 239, 239);
-}
+}   
+
 a{
     color: black;
 }
@@ -81,4 +82,14 @@ h1{
 #caption{
     margin: 100px 0 0 250px;
     text-decoration: none;
+}
+
+.from{
+    position: relative;
+}
+
+label {
+    position: absolute;
+    left: calc(50% + 120px);
+    visibility: hidden;
 }

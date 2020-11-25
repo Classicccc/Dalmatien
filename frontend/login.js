@@ -20,6 +20,17 @@ mainBody.style.background = "linear-gradient(45deg, white, rgb("+rnd(100, 150)+"
 
 document.getElementsByTagName("body")[0].scrollLeft = 0
 
+for (let i = 0; i<9; i++)
+{
+    document.getElementsByClassName("input-data")[i].onchange = () => 
+    {
+        if (document.getElementsByClassName("input-data")[i].value.length > 0)
+            document.getElementsByTagName("label")[i].style.visibility = "visible"
+        else
+            document.getElementsByTagName("label")[i].style.visibility = "hidden"
+    }
+}
+
 function rnd(min, max) {
     return Math.random() * (max - min) + min;
 }
@@ -64,6 +75,14 @@ pasInput.addEventListener('keydown', function(e){
         loginButton.onclick()
 })
 
+function validateUsr(username) {
+    let regexp = /[^A-z^А-я\d_]/;
+    let forbiddenSymbols = username.match(regexp);
+    if (forbiddenSymbols === null) {
+      return false;
+    } else return true;
+   
+}
 
 loginButton.onclick = async (event) => {
     const data = {
@@ -73,6 +92,8 @@ loginButton.onclick = async (event) => {
     }
     if (data.login == "" || data.password == "")
         alert("Fill in all fields")
+    else if (validateUsr(data.login) || validateUsr(data.password))
+        alert("Incorrect symbols. You can use only [A-z],[А-я],[0-9]")
     else
     {
         resData = await newFetch(realUrl, data)
@@ -101,10 +122,13 @@ registerButton.onclick = async () => {
             name: document.getElementsByClassName("input-data")[5].value,
             surname: document.getElementsByClassName("input-data")[6].value,
             age: document.getElementsByClassName("input-data")[7].value,
-            city: document.getElementsByClassName("input-data")[8].value
+            city: document.getElementsByClassName("input-data")[8].value,
+            confirmpas: document.getElementsByClassName("input-data")[4].value
         }
-        if (data.login == "" || data.password == "" || data.name == "" || data.surname == "" || data.age == "" || data.city == "")
+        if (data.login == "" || data.password == "" || data.confirmpas == "" || data.name == "" || data.surname == "" || data.age == "" || data.city == "")
             alert("Fill in all fields")
+        else if (validateUsr(data.login) || validateUsr(data.password) || validateUsr(data.name) || validateUsr(data.surname) || validateUsr(data.age) || validateUsr(data.city) || validateUsr(data.confirmpas))
+            alert("Incorrect symbols. You can use only [A-z],[А-я]")
         else
         {
             resData = await newFetch(realUrl, data)

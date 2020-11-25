@@ -3,6 +3,7 @@ html, body {
     margin: 0%;
     height: 100%;
     background-color: rgb(247, 247, 247);
+    min-width: 1000px;
 }
 
 :any-link{
@@ -24,7 +25,7 @@ header {
 
 .main-message, .main-profile, .main-pictures{
     margin-top: 5%;
-    margin-left: calc((100% - 675px) / 2);
+    /* margin-left: calc((100% - 675px) / 2); */
     margin-bottom: 5%;
 
     position: absolute;
@@ -543,9 +544,12 @@ header {
 .text-content-post{
     margin: 20px 0;
     color: black;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 .pic-content-post{
-    width: 100%;
+    height: 350px;
+    max-width: 100%;
     vertical-align: bottom;
 }
 

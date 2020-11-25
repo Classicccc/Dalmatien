@@ -18,6 +18,8 @@ profileBody.style.zIndex = 2
 messageBody.style.zIndex = 1
 picturesBody.style.zIndex = 0
 
+let firstTime = true
+
 function swap(body1, body2)
 {
     if (buttonSplit.innerText == "Collect")
@@ -58,6 +60,11 @@ function move_body(body0, body1, button)
 {
     if (button.innerText == "Split")
     {
+        if (firstTime)
+        {
+            loadPosts()
+            firstTime = false
+        }
         move(body0, 1, 0, 0.8, -120)
         move(body1, 1, 0, 0.8, 120)
         button.innerText = "Collect"
@@ -121,6 +128,12 @@ buttonMenuPictures.onclick = () =>{
         swap(messageBody, picturesBody)
     else if (profileBody.style.zIndex == "2")
         swap(profileBody, picturesBody)
+    
+        if (firstTime)
+        {
+            loadPosts()
+            firstTime = false
+        }
 }
 
 
@@ -164,14 +177,16 @@ document.getElementById("inputImg").onchange = () =>
 
 document.getElementById("toMyPage").onclick = () =>
 {
-    funcLoad(localStorage.getItem("curLogin"))
-    document.getElementById("input-search").value = ""
+    document.getElementById("icon-toMyPage").onclick()
 }
 
 document.getElementById("icon-toMyPage").onclick = () =>
 {
-    funcLoad(localStorage.getItem("curLogin"))
-    document.getElementById("input-search").value = ""
+    if (document.getElementById("login-profile").textContent !=localStorage.getItem("curLogin"))
+    {
+        funcLoad(localStorage.getItem("curLogin"))
+        document.getElementById("input-search").value = ""
+    }
 }
 
 document.getElementsByClassName("loadOk")[0].onclick = async () =>
@@ -308,3 +323,17 @@ async function funcLoad(login)
     }
 
 }
+
+document.getElementsByClassName("main-message")[0].style.marginLeft = window.getComputedStyle(document.getElementById("caption")).marginLeft
+document.getElementsByClassName("main-profile")[0].style.marginLeft = window.getComputedStyle(document.getElementById("caption")).marginLeft
+document.getElementsByClassName("main-pictures")[0].style.marginLeft = window.getComputedStyle(document.getElementById("caption")).marginLeft
+
+
+document.addEventListener("DOMContentLoaded", function(event)
+{
+    window.onresize = function() {
+        document.getElementsByClassName("main-message")[0].style.marginLeft = window.getComputedStyle(document.getElementById("caption")).marginLeft
+        document.getElementsByClassName("main-profile")[0].style.marginLeft = window.getComputedStyle(document.getElementById("caption")).marginLeft
+        document.getElementsByClassName("main-pictures")[0].style.marginLeft = window.getComputedStyle(document.getElementById("caption")).marginLeft
+    };
+});

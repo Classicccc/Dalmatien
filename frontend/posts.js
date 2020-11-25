@@ -1,4 +1,3 @@
-loadPosts()
 
 // let timerId2 = setInterval(async () => {
 //     loadPosts()
@@ -75,48 +74,43 @@ async function loadPosts()
                 contentPost = document.createElement("div")
                 contentPost.className = "content-post"
                 post.appendChild(contentPost)
-        
+
                 let textContentPost = document.createElement("div")
                 textContentPost.className = "text-content-post"
+                // let pre = document.createElement("pre")
+                // pre.innerText = resData[i].text
+                // textContentPost.appendChild(pre)
                 textContentPost.innerText = resData[i].text
                 contentPost.appendChild(textContentPost)
 
+                data2 = {
+                    type: 9,
+                    id: resData[i].id
+                }
+        
+                response = await fetch(realUrl, {
+                    method: 'POST',
+                    body: JSON.stringify(data2),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                
+                if (response.ok) {
+                    let userPhoto = await response.blob()
+                    if (userPhoto.size > 0)
+                    {
+                        let picContentPost = document.createElement("img")
+                        picContentPost.className="pic-content-post"
+                        picContentPost.src = URL.createObjectURL(userPhoto)
+                        post.appendChild(picContentPost)
+                    }
+                } else {
+                    console.log("Ошибка HTTP: " + response.status);
+                }
+
                 document.getElementsByClassName("posts")[0].appendChild(post)
         
-        } else {
-            console.log("Ошибка HTTP: " + response.status);
-        }
-    }
-    let resDataImg = []
-    for (let i = 0; i<resData.length; i++)
-    {
-        data2 = {
-            type: 9,
-            id: resData[i].id
-        }
-
-        response = await fetch(realUrl, {
-            method: 'POST',
-            body: JSON.stringify(data2),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        
-        if (response.ok) {
-            let userPhoto = await response.blob()
-            if (userPhoto.size > 0)
-                resDataImg.push(userPhoto)
-            else
-                resDataImg.push(undefined)
-
-                if (resDataImg[i] != undefined)
-                {
-                    let picContentPost = document.createElement("img")
-                    picContentPost.className="pic-content-post"
-                    picContentPost.src = URL.createObjectURL(resDataImg[i])
-                    document.getElementsByClassName("content-post")[i].appendChild(picContentPost)
-                }
         } else {
             console.log("Ошибка HTTP: " + response.status);
         }

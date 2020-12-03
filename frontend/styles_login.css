@@ -93,3 +93,30 @@ label {
     left: calc(50% + 120px);
     visibility: hidden;
 }
+
+.info-post{
+    position: absolute;
+    width: 220px;
+    height: 130px;
+    padding: 10px;
+    margin: 10px;
+    visibility: hidden;
+    background-color: white;
+    border-radius: 15px;
+    right: 0;
+    bottom: 0;
+    font-size: 14px;
+}
+.close-info-post{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 15px;
+    height: 15px;
+    padding: 10px;
+    cursor: pointer;
+    color: #2196f3;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}

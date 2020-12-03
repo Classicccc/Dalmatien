@@ -239,12 +239,13 @@ document.getElementsByClassName("loadOk")[0].onclick = async () =>
     }
 }
 
-document.getElementById("icon-search").onclick = () => {
+document.getElementById("icon-search").onclick = async () => {
     login = document.getElementById("input-search").value
     if (login)
     {
-        document.querySelectorAll("#request-to-user button")[0].style.display = "block"
-        funcLoad(login)
+        await funcLoad(login)
+        if ((document.getElementById("login-profile").textContent != localStorage.getItem("curLogin")))
+            document.querySelectorAll("#request-to-user button")[0].style.display = "block"
     }
 }
 
@@ -257,7 +258,7 @@ document.getElementById("input-search").addEventListener('keydown', function(e) 
 async function funcLoad(login)
 {
     data = {
-        type: 3,
+        type: 35,
         login: login
     }
 
@@ -283,7 +284,7 @@ async function funcLoad(login)
             document.getElementsByClassName("other-info-profile")[3].innerText = resData.age
             document.getElementsByClassName("other-info-profile")[4].innerText = resData.city
 
-            if (login == localStorage.getItem("curLogin"))
+            if (resData.login == localStorage.getItem("curLogin"))
                 document.querySelectorAll("#request-to-user button")[0].style.display = "none"
 
             loadPhoto()
@@ -293,7 +294,7 @@ async function funcLoad(login)
                 //type 10 - get picture
                 data = {
                     type: 10,
-                    login: login
+                    login: resData.login
                 }
                 let response = await fetch(realUrl, {
                             method: 'POST',

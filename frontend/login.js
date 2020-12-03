@@ -1,12 +1,10 @@
 const loginButton = document.getElementById("button-login")
 const goingRegButton = document.getElementById("button-going-reg")
 const registerButton = document.getElementById("button-register")
-const okayButton = document.getElementById("button-okay")
 const goingLoginButton = document.getElementById("button-going-login")
 
 const loginBody = document.getElementById("login-form")
 const registerBody = document.getElementById("register-form")
-const okayBody = document.getElementById("okay-form")
 const mainBody = document.getElementsByTagName("body")[0]
 
 const loginInput = document.getElementsByClassName("input-data")[0]
@@ -28,6 +26,8 @@ for (let i = 0; i<9; i++)
             document.getElementsByTagName("label")[i].style.visibility = "visible"
         else
             document.getElementsByTagName("label")[i].style.visibility = "hidden"
+
+        document.getElementsByClassName("input-data")[i].style.borderColor = "rgb(82, 82, 82)";
     }
 }
 
@@ -84,17 +84,31 @@ function validateUsr(username) {
    
 }
 
+function validateAge(age) {
+    let regexp = /[^0-9\d_]/;
+    let forbiddenSymbols = age.match(regexp);
+    if (forbiddenSymbols === null) {
+      return true;
+    } else return false;
+   
+}
+
 loginButton.onclick = async (event) => {
     const data = {
         type: 0,
         login: loginInput.value,
         password: pasInput.value
     }
-    if (data.login == "" || data.password == "")
-        alert("Fill in all fields")
-    else if (validateUsr(data.login) || validateUsr(data.password))
-        alert("Incorrect symbols. You can use only [A-z],[А-я],[0-9]")
-    else
+    let okay = true;
+        for (let i = 0; i<2; i++)
+        {
+            if (document.getElementsByClassName("input-data")[i].value.length < 4 || validateUsr(document.getElementsByClassName("input-data")[i].value))
+            {
+                document.getElementsByClassName("input-data")[i].style.borderColor = "red";
+                okay = false;
+            }
+        }
+    if (okay)
     {
         resData = await newFetch(realUrl, data)
         
@@ -107,7 +121,8 @@ loginButton.onclick = async (event) => {
         else 
             alert(resData)
     }
-
+    else
+        document.getElementsByClassName("info-post")[0].style.visibility = "visible";
 }
 
 registerButton.onclick = async () => {
@@ -125,11 +140,39 @@ registerButton.onclick = async () => {
             city: document.getElementsByClassName("input-data")[8].value,
             confirmpas: document.getElementsByClassName("input-data")[4].value
         }
-        if (data.login == "" || data.password == "" || data.confirmpas == "" || data.name == "" || data.surname == "" || data.age == "" || data.city == "")
-            alert("Fill in all fields")
-        else if (validateUsr(data.login) || validateUsr(data.password) || validateUsr(data.name) || validateUsr(data.surname) || validateUsr(data.age) || validateUsr(data.city) || validateUsr(data.confirmpas))
-            alert("Incorrect symbols. You can use only [A-z],[А-я]")
-        else
+        // if (data.login.length < 4 || data.password.length < 4 || data.confirmpas.length < 4 || data.name.length < 4 || data.surname.length < 4 || data.age == "" || data.city.length < 4)
+        //     alert(document.getElementsByClassName("input-data")[2].value)
+        // else if (validateUsr(data.login) || validateUsr(data.password) || validateUsr(data.name) || validateUsr(data.surname) || validateUsr(data.age) || validateUsr(data.city) || validateUsr(data.confirmpas))
+        //     alert("Incorrect symbols. You can use only [A-z],[А-я],[0-9]")
+        // else
+        // {
+        //     resData = await newFetch(realUrl, data)
+            
+        //     if (resData == "OK")
+        //     {
+        //         localStorage.setItem("curLogin", data.login)
+        //         contactYourSelf()
+        //         document.location.href = ("index.html")
+        //     }
+        //     else 
+        //         alert(resData)
+        // }
+
+        let okay = true;
+        for (let i = 2; i<9; i++)
+        {
+            if (document.getElementsByClassName("input-data")[i].value.length < 4 || validateUsr(document.getElementsByClassName("input-data")[i].value))
+            {
+                document.getElementsByClassName("input-data")[i].style.borderColor = "red";
+                if (i == 7 && (document.getElementsByClassName("input-data")[i].value != "") && (validateAge(document.getElementsByClassName("input-data")[i].value)))
+                {
+                    document.getElementsByClassName("input-data")[i].style.borderColor = "rgb(82,82,82)";
+                }
+                else
+                    okay = false;
+            }
+        }
+        if (okay)
         {
             resData = await newFetch(realUrl, data)
             
@@ -142,6 +185,9 @@ registerButton.onclick = async () => {
             else 
                 alert(resData)
         }
+        else
+            document.getElementsByClassName("info-post")[0].style.visibility = "visible";
+
     }
 }
 
@@ -161,11 +207,6 @@ contactYourSelf = async () =>
         alert("Непредвиденная ошибка")
 }
 
-
-okayButton.onclick = () => {
-    document.location.href = ("index.html")
-}
-
 function move(body, translate1, translate2)
 {
     let anime = body.animate([
@@ -182,4 +223,9 @@ function move(body, translate1, translate2)
     anime.addEventListener('finish', function() {
         body.style.transform = 'translate('+translate2+'%)'
     });
+}
+
+document.getElementsByClassName("close-info-post")[0].onclick = () =>
+{
+    document.getElementsByClassName("info-post")[0].style.visibility = "hidden";
 }

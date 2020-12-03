@@ -8,12 +8,12 @@
     
 </head>
 <body>
-        <div id="caption"><h1>Dalmatien</h1><a target="blank" href="https://github.com/Classicccc/WebDevelopment-4course"><br>WebProject by <br>Aleksandr Artemyev</a></div>
+        <div id="caption"><h1>Dalmatien</h1><a target="blank" href="https://github.com/Classicccc/dalmatien"><br>WebProject by <br>Aleksandr Artemyev</a></div>
         <div class="background-login" id="login-form">
             <div id="login-box">
-                    <input class="input-data" placeholder="Login" name="login" required>
+                    <input class="input-data" placeholder="Login" name="login" maxlength="12" required>
                     <label style="top:14px">Login</label>
-                    <input class="input-data" type="password" placeholder="Password" name="password" required>
+                    <input class="input-data" maxlength="12" type="password" placeholder="Password" name="password" required>
                     <label style="top:82px">Password</label>
                     <button id="button-login" type="submit">Login</button>
                     <div><a id="button-going-reg" href="#">Register →</a></div>
@@ -21,25 +21,28 @@
         </div>
         <div class="background-login" id="register-form">
             <div id="login-box">
-                <input class="input-data" placeholder="Login" name="login" required>
+                <input class="input-data" maxlength="12" placeholder="Login" name="login" required>
                 <label style="top:14px">Login</label>
-                <input class="input-data" type="password" placeholder="Password" name="password" required>
+                <input class="input-data" maxlength="12" type="password" placeholder="Password" name="password" required>
                 <label style="top:82px">Password</label>
-                <input class="input-data" type="password" placeholder="Confirm password" name="confirmPas" required>
+                <input class="input-data" maxlength="12" type="password" placeholder="Confirm password" name="confirmPas" required>
                 <label style="top:150px">Confirm password</label>
-                <input class="input-data" placeholder="Name" name="name" required>
+                <input class="input-data" maxlength="16" placeholder="Name" name="name" required>
                 <label style="top:218px">Name</label>
-                <input class="input-data" placeholder="Surname" name="surname" required>
+                <input class="input-data" maxlength="16" placeholder="Surname" name="surname" required>
                 <label style="top:286px">Surname</label>
-                <input class="input-data" placeholder="age" name="age" required>
+                <input class="input-data" maxlength="3" placeholder="age" name="age" required>
                 <label style="top:354px">age</label>
-                <input class="input-data" placeholder="City" name="city" required>
+                <input class="input-data" maxlength="16" placeholder="City" name="city" required>
                 <label style="top:422px">City</label>
                 <button id="button-register">Register</button>
                 <div><a id="button-going-login" href="#">← Login</a></div>
             </div>
         </div>
-    
+        <div class="info-post">
+            <div class="close-info-post">X</div>
+            <div class="info-text" style="width: 200px;">Проверьте корректность выделенных полей. Минимальная длина поля 4 символа. Вы можете использовать символы [A-z],[А-я],[0-9]. <br> (Исключение поле "age")</div>
+        </div>
     <script src="login.js"></script>
 </body>
 </html>

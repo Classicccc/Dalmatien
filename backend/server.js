@@ -192,6 +192,26 @@ server.on('request', (req, res) => {
                         res.end(JSON.stringify(data))
                     })
                 }
+                else if (params.type == 35) //get info about user update
+                {
+                    connection.promise().query("SELECT * FROM dalmatien.users WHERE login rlike ? ;", [params.login])
+                    .then(result =>{
+                        let data = {
+                            code: "OK",
+                            login: result[0][0].login,
+                            name: result[0][0].name,
+                            surname: result[0][0].surname,
+                            age: result[0][0].age,
+                            city: result[0][0].city
+                        }
+                        res.end(JSON.stringify(data))
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        let data = {code: "ERROR"}
+                        res.end(JSON.stringify(data))
+                    })
+                }
                 else if (params.type == 4)
                 {
                     connection.promise().query("SELECT * FROM dalmatien.contacts WHERE (login_user1 = ? AND login_user2 = ?) or (login_user1 = ? AND login_user2 = ?);", [params.login1, params.login2, params.login2, params.login1])

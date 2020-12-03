@@ -12,9 +12,6 @@ const connection = mysql.createPool({
     user     : dbData.user,
     password : dbData.password,
     database : dbData.database,
-    ssl  : {
-      ca : fs.readFileSync('../root.crt'),
-    }
   });
 
 const options = {
@@ -182,7 +179,8 @@ server.on('request', (req, res) => {
                             name: result[0][0].name,
                             surname: result[0][0].surname,
                             age: result[0][0].age,
-                            city: result[0][0].city
+                            city: result[0][0].city,
+                            photo: result[0][0].photo
                         }
                         res.end(JSON.stringify(data))
                     })
@@ -202,7 +200,8 @@ server.on('request', (req, res) => {
                             name: result[0][0].name,
                             surname: result[0][0].surname,
                             age: result[0][0].age,
-                            city: result[0][0].city
+                            city: result[0][0].city,
+                            photo: result[0][0].photo
                         }
                         res.end(JSON.stringify(data))
                     })
@@ -249,7 +248,7 @@ server.on('request', (req, res) => {
                 }
                 else if (params.type == 5) // 5 - contacts data                  
                 {
-                    connection.promise().query("SELECT login, name, surname FROM dalmatien.users WHERE login IN (SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = ? and type <> 0) UNION SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = ? and type <> 0));", [params.login, params.login])
+                    connection.promise().query("SELECT login, name, surname, photo FROM dalmatien.users WHERE login IN (SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = ? and type <> 0) UNION SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = ? and type <> 0));", [params.login, params.login])
                     .then(result =>{
                         connection.promise().query("SELECT * FROM dalmatien.contacts WHERE (login_user1 = ? or login_user2 = ?);", [params.login, params.login])
                             .then(result2 =>{
@@ -311,9 +310,9 @@ server.on('request', (req, res) => {
                 else if (params.type == 8)
                 {//get posts
                     //SELECT text FROM dalmatien.posts WHERE login IN (SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = "classic" and type = 2) UNION SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = "classic" and type = 2)) ORDER BY id;
-                    connection.promise().query("SELECT login,name,surname FROM dalmatien.users WHERE login IN (SELECT login FROM dalmatien.posts WHERE login IN (SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = ? and type = 2) UNION SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = ? and type = 2)))", [params.login, params.login])
+                    connection.promise().query("SELECT login,name,surname,photo FROM dalmatien.users WHERE login IN (SELECT login FROM dalmatien.posts WHERE login IN (SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = ? and type = 2) UNION SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = ? and type = 2)))", [params.login, params.login])
                     .then(result =>{
-                            connection.promise().query("SELECT id, login, text FROM dalmatien.posts WHERE login IN (SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = ? and type = 2) UNION SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = ? and type = 2)) ORDER BY id DESC;", [params.login, params.login])
+                            connection.promise().query("SELECT * FROM dalmatien.posts WHERE login IN (SELECT login_user1 FROM dalmatien.contacts WHERE (login_user2 = ? and type = 2) UNION SELECT login_user2 FROM dalmatien.contacts WHERE (login_user1 = ? and type = 2)) ORDER BY id DESC;", [params.login, params.login])
                             .then(result2 =>{
                                 for (let i = 0; i<result2[0].length; i++)
                                 {
@@ -322,6 +321,7 @@ server.on('request', (req, res) => {
                                         {
                                             result2[0][i].name = result[0][j].name
                                             result2[0][i].surname = result[0][j].surname
+                                            result2[0][i].photo = result[0][j].photo
                                         }
                                 }
                                 res.end(JSON.stringify(result2[0]))
@@ -395,8 +395,9 @@ server.on('request', (req, res) => {
                 // fs.writeFileSync('image.jpg', blob);
                 if (currentLoginForLoadImg != "")
                 {
-
-                    connection.promise().query("UPDATE dalmatien.users SET photo = ? WHERE (login = ? );", [blob, currentLoginForLoadImg])
+                    let path = "./users_images/User_"+currentLoginForLoadImg+'.jpg'
+                    fs.writeFileSync("../frontend/"+path, blob)
+                    connection.promise().query("UPDATE dalmatien.users SET photo = ? WHERE (login = ? );", [path, currentLoginForLoadImg])
                         .then(result =>{
                             res.end("OK")
                             currentLoginForLoadImg = ""
@@ -408,7 +409,9 @@ server.on('request', (req, res) => {
                 }
                 else if (currentIdForPost != "")
                 {
-                    connection.promise().query("UPDATE posts SET img = ? WHERE id = ?;", [blob, currentIdForPost])
+                    let path = "./posts_images/Post_"+currentIdForPost+'.jpg'
+                    fs.writeFileSync("../frontend/"+path, blob)
+                    connection.promise().query("UPDATE posts SET img = ? WHERE id = ?;", [path, currentIdForPost])
                         .then(result =>{
                             res.end("OK")
                             currentIdForPost = ""

@@ -75,33 +75,6 @@ async function loadContacts()
     }
 
     resData = await newFetch(data)
-    resDataPhotos = []
-    for (let i = 0; i<resData.length; i++)
-    {
-        data2 = {
-            type: 6,
-            i: i,
-            login: localStorage.getItem("curLogin")
-        }
-
-        response = await fetch(realUrl, {
-            method: 'POST',
-            body: JSON.stringify(data2),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        
-        if (response.ok) {
-            let userPhoto = await response.blob()
-            if (userPhoto.size > 0)
-                resDataPhotos.push(userPhoto)
-            else
-                resDataPhotos.push(undefined)
-        } else {
-            console.log("Ошибка HTTP: " + response.status);
-        }
-    }
     
     for (let i = 0; i<resData.length; i++)
     {
@@ -114,8 +87,8 @@ async function loadContacts()
                 document.getElementsByClassName("user-messages")[0].style.zIndex = "1"
                 document.getElementsByClassName("user-contacts")[0].style.zIndex = "0"
                 document.getElementById("login-link").innerText = resData[i].login
-                if (resDataPhotos[i]!=undefined)
-                    document.getElementsByClassName("user-pic")[0].style.backgroundImage = "url("+ URL.createObjectURL(resDataPhotos[i]) +")"
+                if (resData[i].photo)
+                    document.getElementsByClassName("user-pic")[0].style.backgroundImage = "url("+ resData[i].photo +")"
                 else  document.getElementsByClassName("user-pic")[0].style.backgroundImage = "url('img/img-profile.jpg')"
                 
                 //type 7 - get messages with userN
@@ -202,8 +175,8 @@ async function loadContacts()
 
         let contactImg = document.createElement("div")
         contactImg.id = "contact-img"
-        if (resDataPhotos[i] != undefined)
-            contactImg.style.backgroundImage = "url("+ URL.createObjectURL(resDataPhotos[i]) +")"
+        if (resData[i].photo)
+            contactImg.style.backgroundImage = "url("+ resData[i].photo +")"
 
         contact.appendChild(contactImg)
     }

@@ -10,9 +10,7 @@ const picturesBody = document.getElementsByClassName("main-pictures")[0]
 
 const buttonSplit = document.getElementById("button-split")
 
-const audio = document.getElementById("audio_bang")
 const dalmatien = document.getElementById("dalmatien")
-audio.volume = 0.05
 
 profileBody.style.zIndex = 2
 messageBody.style.zIndex = 1
@@ -136,20 +134,6 @@ buttonMenuPictures.onclick = () =>{
         }
 }
 
-
-isplaying = false
-dalmatien.onclick = () => {
-    if (isplaying)
-    {
-        audio.pause()
-        isplaying = false
-    }
-    else
-    {
-        audio.play()
-        isplaying = true
-    }
-}
 
 const singOut = document.getElementById("sing-out")
 singOut.onclick = () =>
@@ -287,34 +271,10 @@ async function funcLoad(login)
             if (resData.login == localStorage.getItem("curLogin"))
                 document.querySelectorAll("#request-to-user button")[0].style.display = "none"
 
-            loadPhoto()
-
-            async function loadPhoto()
-            {
-                //type 10 - get picture
-                data = {
-                    type: 10,
-                    login: resData.login
-                }
-                let response = await fetch(realUrl, {
-                            method: 'POST',
-                            body: JSON.stringify(data),
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        })
-
-                        if (response.ok) {
-                            let userPhoto = await response.blob()
-                            if (userPhoto.size > 0)
-                                document.getElementById("img-profile").style.backgroundImage = "url("+ URL.createObjectURL(userPhoto) +")"
-                            else
-                                document.getElementById("img-profile").style.backgroundImage = "url(img/img-profile.jpg)" 
-                        } else {
-                            alert("Ошибка HTTP: " + response.status);
-                        }
-            }
-
+            if (resData.photo)
+                document.getElementById("img-profile").style.backgroundImage = "url("+ resData.photo +")"
+            else
+                document.getElementById("img-profile").style.backgroundImage = "url(img/img-profile.jpg)" 
         }
         else 
             alert("This user is not defind")

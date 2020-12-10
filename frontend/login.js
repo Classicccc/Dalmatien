@@ -114,7 +114,8 @@ loginButton.onclick = async (event) => {
         
         if (resData.code == "OK")
         {   
-            localStorage.setItem("curLogin", resData.login)
+            localStorage.setItem("curLogin", resData.id)
+            localStorage.setItem("realLogin", resData.login)
             document.location.href = ("index.html")
             // document.getElementById("username-profile").innerText = "resData.login"
         }
@@ -176,9 +177,10 @@ registerButton.onclick = async () => {
         {
             resData = await newFetch(realUrl, data)
             
-            if (resData == "OK")
+            if (resData > -1)
             {
-                localStorage.setItem("curLogin", data.login)
+                localStorage.setItem("curLogin", resData)
+                localStorage.setItem("realLogin", data.login)
                 contactYourSelf()
                 document.location.href = ("index.html")
             }

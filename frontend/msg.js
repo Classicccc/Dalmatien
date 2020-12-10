@@ -33,7 +33,7 @@ async function new_msg(msg)
             message : msg_value,
             date : cur_date,
             login_sender: localStorage.getItem("curLogin"),
-            login_getter: document.getElementById("login-link").innerText
+            login_getter: currentIdDialogUser
         }
 
         res = await fetch(realUrl, {

@@ -164,11 +164,45 @@ document.getElementById("toMyPage").onclick = () =>
     document.getElementById("icon-toMyPage").onclick()
 }
 
-document.getElementById("icon-toMyPage").onclick = () =>
+document.getElementById("icon-toMyPage").onclick = async () =>
 {
-    if (document.getElementById("login-profile").textContent !=localStorage.getItem("curLogin"))
+    if (document.getElementsByClassName("other-info-profile")[5].textContent !=localStorage.getItem("curLogin"))
     {
-        funcLoad(localStorage.getItem("curLogin"))
+        //funcLoad(localStorage.getItem("curLogin"))
+        data = {
+            type: 3,
+            login: localStorage.getItem("curLogin")
+        }
+        let resData = await fetch(realUrl, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (resData.ok) {
+                resData = await resData.json()
+
+                    document.getElementById("login-profile").innerText = resData.login
+                    document.getElementById("username-profile").innerText = resData.name + " " + resData.surname
+                    document.getElementsByClassName("other-info-profile")[0].innerText = resData.login
+                    document.getElementsByClassName("other-info-profile")[1].innerText = resData.name
+                    document.getElementsByClassName("other-info-profile")[2].innerText = resData.surname
+                    document.getElementsByClassName("other-info-profile")[3].innerText = resData.age
+                    document.getElementsByClassName("other-info-profile")[4].innerText = resData.city
+                    document.getElementsByClassName("other-info-profile")[5].innerText = resData.id
+
+                    if (resData.id == localStorage.getItem("curLogin"))
+                        document.querySelectorAll("#request-to-user button")[0].style.display = "none"
+
+                    if (resData.photo)
+                        document.getElementById("img-profile").style.backgroundImage = "url("+ resData.photo +")"
+                    else
+                        document.getElementById("img-profile").style.backgroundImage = "url(img/img-profile.jpg)"
+        }
+
+
         document.getElementById("input-search").value = ""
     }
 }
@@ -223,21 +257,29 @@ document.getElementsByClassName("loadOk")[0].onclick = async () =>
     }
 }
 
-document.getElementById("icon-search").onclick = async () => {
+document.getElementById("input-search").oninput = async () =>
+{
     login = document.getElementById("input-search").value
     if (login)
     {
         await funcLoad(login)
+        document.getElementById("dropdown-contacts").style.display = "block"
         if ((document.getElementById("login-profile").textContent != localStorage.getItem("curLogin")))
             document.querySelectorAll("#request-to-user button")[0].style.display = "block"
     }
+    else
+    document.getElementById("dropdown-contacts").style.display = "none"
 }
 
-document.getElementById("input-search").addEventListener('keydown', function(e) {
-    if (e.keyCode == 13){
-        document.getElementById("icon-search").onclick()
-    }
-})
+// document.getElementById("input-search").onblur = () =>
+// {
+//     document.getElementById("dropdown-contacts").style.display = "none"
+// }
+
+document.onclick = () =>
+{
+    document.getElementById("dropdown-contacts").style.display = "none"
+}
 
 async function funcLoad(login)
 {
@@ -257,33 +299,70 @@ async function funcLoad(login)
     if (resData.ok) {
 
         resData = await resData.json()
+        console.log(resData)
 
-        if (resData.code == "OK")
+        if (resData.code != "ERROR")
         {
-            document.getElementById("login-profile").innerText = resData.login
-            document.getElementById("username-profile").innerText = resData.name + " " + resData.surname
-            document.getElementsByClassName("other-info-profile")[0].innerText = resData.login
-            document.getElementsByClassName("other-info-profile")[1].innerText = resData.name
-            document.getElementsByClassName("other-info-profile")[2].innerText = resData.surname
-            document.getElementsByClassName("other-info-profile")[3].innerText = resData.age
-            document.getElementsByClassName("other-info-profile")[4].innerText = resData.city
+            document.getElementById("dropdown-contacts").innerHTML = ""
 
-            if (resData.login == localStorage.getItem("curLogin"))
-                document.querySelectorAll("#request-to-user button")[0].style.display = "none"
+            for (let i = 0; i<resData.length; i++)
+            {
+            if (resData[i].id != localStorage.getItem("curLogin"))
+            {
+                let contact = document.createElement("div")
+                contact.className = "contact"
 
-            if (resData.photo)
-                document.getElementById("img-profile").style.backgroundImage = "url("+ resData.photo +")"
-            else
-                document.getElementById("img-profile").style.backgroundImage = "url(img/img-profile.jpg)" 
+                let contactName = document.createElement("div")
+                contactName.id = "contact-name"
+                contactName.innerText = resData[i].name + " " + resData[i].surname
+                contact.appendChild(contactName)
+
+                let contactLogin = document.createElement("div")
+                contactLogin.id = "contact-login"
+                contactLogin.innerText = resData[i].login
+                contactName.appendChild(contactLogin)
+
+                let contactImg = document.createElement("div")
+                contactImg.id = "contact-img"
+                if (resData[i].photo)
+                    contactImg.style.backgroundImage = "url("+ resData[i].photo +")"
+
+                contact.appendChild(contactImg)
+
+                contact.onclick = () =>
+                {
+                    document.getElementById("login-profile").innerText = resData[i].login
+                    document.getElementById("username-profile").innerText = resData[i].name + " " + resData[i].surname
+                    document.getElementsByClassName("other-info-profile")[0].innerText = resData[i].login
+                    document.getElementsByClassName("other-info-profile")[1].innerText = resData[i].name
+                    document.getElementsByClassName("other-info-profile")[2].innerText = resData[i].surname
+                    document.getElementsByClassName("other-info-profile")[3].innerText = resData[i].age
+                    document.getElementsByClassName("other-info-profile")[4].innerText = resData[i].city
+                    document.getElementsByClassName("other-info-profile")[5].innerText = resData[i].id
+
+                    if (resData[i].id == localStorage.getItem("curLogin"))
+                        document.querySelectorAll("#request-to-user button")[0].style.display = "none"
+
+                    if (resData[i].photo)
+                        document.getElementById("img-profile").style.backgroundImage = "url("+ resData[i].photo +")"
+                    else
+                        document.getElementById("img-profile").style.backgroundImage = "url(img/img-profile.jpg)"
+                }
+
+                document.getElementById("dropdown-contacts").appendChild(contact);
+            }
+                if (i == 5)
+                    break;
+            
+            }
         }
-        else 
-            alert("This user is not defind")
-
-    } else {
-                alert("Ошибка HTTP: " + response.status);
+        else
+        {
+            document.getElementById("dropdown-contacts").innerHTML = "<br>&nbsp;&nbsp;&nbsp;Пользователей не найдено <br><br>"
+        }
     }
-
 }
+
 
 document.getElementsByClassName("main-message")[0].style.marginLeft = window.getComputedStyle(document.getElementById("caption")).marginLeft
 document.getElementsByClassName("main-profile")[0].style.marginLeft = window.getComputedStyle(document.getElementById("caption")).marginLeft

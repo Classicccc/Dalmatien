@@ -6,13 +6,14 @@ let url = new URL(window.location.href)
 const realUrl = url.protocol+"//"+url.host
 let timerId
 let last_id
+let currentIdDialogUser
 
 loadContacts()
 
 const butReq = document.querySelectorAll("#request-to-user button")[0]
 butReq.onclick = async () =>
 {
-    login = document.getElementById("login-profile").textContent
+    login = document.getElementsByClassName("other-info-profile")[5].textContent
 
     load(login)
 }
@@ -97,6 +98,8 @@ async function loadContacts()
                     id_contact: resData[i].id_contact
                 }
 
+                currentIdDialogUser = resData[i].id
+
                 resMsg = await newFetch(dataMsg)
 
                 let resMsg2
@@ -157,7 +160,8 @@ async function loadContacts()
                 ans = confirm("Confirm request?")
                 if (ans)
                 {
-                    load(resData[i].login)
+                    console.log(resData[i].id)
+                    load(resData[i].id)
                 }
             }
             document.getElementsByClassName("body-contacts")[1].appendChild(contact)
